@@ -4,9 +4,7 @@ This package provides some Python routines for time integration based on Magnus-
 ## Krylov methods
 
 The solution to the system of ODE's
-$$
-\psi'(t)=\mathrm{i}H\psi(t),\qquad \psi(0)=u,
-$$
+$$\psi'(t)=\mathrm{i}H\psi(t),\qquad \psi(0)=u,$$
 where $H\in\mathbb{C}^{n\times n}$, $\psi(t)\in\mathbb{C}^{n}$ and $u\in\mathbb{C}^{n}$ for a dimension $n$ which is assumed to be large,
 is given by the matrix exponential applied to $u$, i.e.,
 $$\psi(t) = \exp(\mathrm{i}tH)u.\end{equation}
