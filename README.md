@@ -10,7 +10,7 @@ $$
 where $H\in\mathbb{C}^{n\times n}$, $\psi(t)\in\mathbb{C}^{n}$ and $u\in\mathbb{C}^{n}$ for a dimension $n$ which is assumed to be large,
 is given by the matrix exponential applied to $u$, i.e.,
 $$\psi(t) = \exp(\mathrm{i}tH)u.\end{equation}
-The routine `expimv\_pKry` provides an approximation to the action of the matrix exponential,
+The routine `expimv_pKry` provides an approximation to the action of the matrix exponential,
 $$y_K(t,H,u) \approx \exp(\mathrm{i}H)u.$$
 The approximation is computed to satisfy the error bound
 $$\| y_K(t,H,u) -\exp(\mathrm{i}tH)u\|\leq \varepsilon t.$$
@@ -27,9 +27,9 @@ are computed to satisfy the error bound
 $$\| y_{MK}(t,H,u) -\exp(\mathrm{i}tH)u\|\leq \varepsilon t.$$
 ## Examples
 `examples/comparestepscosts.ipyn`: compare step sizes and computational cost of adaptive Magnus-Krylov methods. Step sizes:
-![dt over t](https://github.com/newbisi/mkprop/examples/stepsize.pdf)
+![dt over t](https://github.com/newbisi/mkprop/blob/main/examples/stepsize.pdf)
 Cost:
-![cost per dt over t](https://github.com/newbisi/mkprop/examples/costperstepsize.pdf)
+![cost per dt over t](https://github.com/newbisi/mkprop/blob/main/examples/costperstepsize.pdf)
 `examples/testerrasymorder.ipynb`:
 Errors and error estimates over the step size, asymptotic eror.
-![errors over dt](https://github.com/newbisi/mkprop/examples/asymptoticerror.pdf)
+![errors over dt](https://github.com/newbisi/mkprop/blob/main/examples/asymptoticerror.pdf)
