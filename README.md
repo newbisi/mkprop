@@ -27,9 +27,9 @@ are computed to satisfy the error bound
 $$\| y_{MK}(t,H,u) -\exp(\mathrm{i}tH)u\|\leq \varepsilon t.$$
 ## Examples
 `examples/comparestepscosts.ipyn`: compare step sizes and computational cost of adaptive Magnus-Krylov methods. Step sizes:
-![dt over t](https://github.com/newbisi/mkprop/blob/main/examples/stepsize.pdf)
+![dt over t](https://github.com/newbisi/mkprop/blob/main/examples/stepsize.png)
 Cost:
-![cost per dt over t](https://github.com/newbisi/mkprop/blob/main/examples/costperstepsize.pdf)
+![cost per dt over t](https://github.com/newbisi/mkprop/blob/main/examples/costperstepsize.png)
 `examples/testerrasymorder.ipynb`:
 Errors and error estimates over the step size, asymptotic eror.
-![errors over dt](https://github.com/newbisi/mkprop/blob/main/examples/asymptoticerror.pdf)
+![errors over dt](https://github.com/newbisi/mkprop/blob/main/examples/asymptoticerror.png)
