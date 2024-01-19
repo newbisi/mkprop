@@ -9,10 +9,10 @@ $$
 $$
 where $H\in\mathbb{C}^{n\times n}$, $\psi(t)\in\mathbb{C}^{n}$ and $u\in\mathbb{C}^{n}$ for a dimension $n$ which is assumed to be large,
 is given by the matrix exponential applied to $u$, i.e.,
-$$
+\begin{equation}
 \psi(t) = \exp(\mathrm{i}tH)u.
-$$
-The routine \texttt{expimv\_pKry} provides an approximation to the action of the matrix exponential,
+\end{equation}
+The routine `expimv\_pKry` provides an approximation to the action of the matrix exponential,
 $$
 y_K(t,H,u) \approx \exp(\mathrm{i}H)u.
 $$
@@ -40,10 +40,10 @@ $$
 \| y_{MK}(t,H,u) -\exp(\mathrm{i}tH)u\|\leq \varepsilon t.
 $$
 ##Examples
-\texttt{examples/comparestepscosts.ipyn}: compare step sizes and computational cost of adaptive Magnus-Krylov methods. Step sizes:
+`examples/comparestepscosts.ipyn`: compare step sizes and computational cost of adaptive Magnus-Krylov methods. Step sizes:
 ![dt over t](https://github.com/newbisi/mkprop/examples/stepsize.pdf)
 Cost:
 ![cost per dt over t](https://github.com/newbisi/mkprop/examples/costperstepsize.pdf)
-\texttt{examples/testerrasymorder.ipynb}:
+`examples/testerrasymorder.ipynb`:
 Errors and error estimates over the step size, asymptotic eror.
 ![errors over dt](https://github.com/newbisi/mkprop/examples/asymptoticerror.pdf)
