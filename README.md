@@ -7,7 +7,7 @@ The solution to the system of ODE's
 $$\psi'(t)=\mathrm{i}H\psi(t),\qquad \psi(0)=u,$$
 where $H\in\mathbb{C}^{n\times n}$, $\psi(t)\in\mathbb{C}^{n}$ and $u\in\mathbb{C}^{n}$ for a dimension $n$ which is assumed to be large,
 is given by the matrix exponential applied to $u$, i.e.,
-$$\psi(t) = \exp(\mathrm{i}tH)u.\end{equation}
+$$\psi(t) = \exp(\mathrm{i}tH)u.$$
 The routine `expimv_pKry` provides an approximation to the action of the matrix exponential,
 $$y_K(t,H,u) \approx \exp(\mathrm{i}H)u.$$
 The approximation is computed to satisfy the error bound
