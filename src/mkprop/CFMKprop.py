@@ -218,7 +218,7 @@ def adaptiveCFM4_old(u,tnow,tend,dtinit,prob,tol=1e-8,m=30,ktype=1,reo=1,nrm=Non
         if parth1[0]>0:
             Gam11 += parth1[0]*Hpsi 
         e0sub += Gam11
-    
+
         y1sub, errestkry, tkrylist, mlist = expimv_pKry(mv,y0sub,tol=tolkry,t=dt,m=m,ktype=2,reo=0)
         e1sub, errestkry, tkrylist, mlist = expimv_pKry(mv,e0sub,tol=tolkry,t=dt,m=m,ktype=2,reo=0)
     
@@ -312,8 +312,22 @@ def adaptiveCFMp4j3(u,tnow,tend,dtinit,prob,tol=1e-8,m=30,ktype=1,reo=1,nrm=None
     parth1 = [sa, 0.5, 1-sa]
     parth2 = [1-sa, 0.5, sa]
     return adaptiveCFM4_symdefHermite(u,tnow,tend,dtinit,prob,cmat,amat,parth1,parth2,tol,m,ktype,reo,nrm,inr)
+
+def adaptiveCFMBBK4(u,tnow,tend,dtinit,prob,tol=1e-8,m=30,ktype=1,reo=1,nrm=None, inr=None):
+    if inr is None:
+        inr = lambda x,y : np.vdot(x,y)
+    if nrm is None:
+        nrm = lambda x : np.sqrt(inr(x,x).real)
+    c = 15**0.5
+    cmat = [0.5-c/10, 0.5, 0.5+c/10]
+    a1 = [(10+c)/180, -1/9, (10-c)/180]
+    a2 = [(15+8*c)/180,1/3,(15-8*c)/180]
+    amat = [a1,a2,a2[::-1],a1[::-1]]
+    parth1 = [1,1,0,0]
+    parth2 = [0,0,1,1]
+    return adaptiveCFM4_symdefHermite(u,tnow,tend,dtinit,prob,cmat,amat,parth1,parth2,tol,m,ktype,reo,nrm,inr,hasexpV=True)
     
-def adaptiveCFM4_symdefHermite(u,tnow,tend,dtinit,prob,cmat,amat,parth1,parth2,tol,m,ktype,reo,nrm,inr):
+def adaptiveCFM4_symdefHermite(u,tnow,tend,dtinit,prob,cmat,amat,parth1,parth2,tol,m,ktype,reo,nrm,inr,hasexpV=False):
 
     chat = -0.5
     jexps=len(amat)
@@ -354,11 +368,16 @@ def adaptiveCFM4_symdefHermite(u,tnow,tend,dtinit,prob,cmat,amat,parth1,parth2,t
             if parth1[know]!=0:
                 Gam11 += parth1[know]*Hpsi 
             e0sub += Gam11
-    
-            y1sub, errestkry, tkrylist, mlist1 = expimv_pKry(mv,y0sub,tol=tolkry,
-                                                                        t=dt,m=m,ktype=ktype,reo=reo)
-            e1sub, errestkry, tkrylist, mlist2 = expimv_pKry(mv,e0sub,tol=tolkry,
-                                                                        t=dt,m=m,ktype=ktype,reo=reo)
+
+            if ((hasexpV) and (sum(anow)<1e-12)):
+                y1sub = prob.applyexpV(sig,dt,y0sub)
+                e1sub = prob.applyexpV(sig,dt,e0sub)
+                mlist1, mlist2 = [], []
+            else:
+                y1sub, errestkry, tkrylist, mlist1 = expimv_pKry(mv,y0sub,tol=tolkry,
+                                                                 t=dt,m=m,ktype=ktype,reo=reo)
+                e1sub, errestkry, tkrylist, mlist2 = expimv_pKry(mv,e0sub,tol=tolkry,
+                                                                 t=dt,m=m,ktype=ktype,reo=reo)
             
             dHpsi = dmv(y1sub)
             Hpsi = mv(y1sub)
