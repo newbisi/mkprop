@@ -3,7 +3,7 @@
 
 This package provides some Python routines for time integration based on Magnus-Krylov and Krylov methods.
 
-**The package is still under development. Future versions might have different API. The current version is not fully documented.**
+**This package is still under development. Future versions might have different API. The current version is not fully documented.**
 
 ## Getting started
 run `python -m pip install .` inside the mkprop folder to install the package.
@@ -15,11 +15,11 @@ $$\psi'(t)=\mathrm{i}H\psi(t),\qquad \psi(t_0)=u\in\mathbb{C}^{n},$$
 where $H\in\mathbb{C}^{n\times n}$ and $u$ denotes an initial vector for a dimension $n$. Then $\psi(t)$ is given by the action of the matrix exponential on $u$, i.e.,
 $$\psi(t_0+t) = \exp(\mathrm{i}tH)u.$$
 In a similar manner, we consider non-autonomous system of ODE's.
-The solution to the system of ODE's
+The solution of the system of ODE's
 $$\psi'(t)=\mathrm{i}H(t)\psi(t),\qquad \psi(t_0)\in\mathbb{C}^{n},$$
-where $H(t)\in\mathbb{C}^{n\times n}$ depends on the time $t$. The solution $\psi(t)$ can be described by a Magnus expansion
+where $H(t)\in\mathbb{C}^{n\times n}$ depends on the time $t$, is given by the Magnus expansion
 $$\psi(t_0+t) = \exp(\mathrm{i}t\Omega(t_0,t))\psi(t_0),$$
-where the Magnus expansion
+where
 $$\Omega(t_0,t)=\sum_{j=1}^\infty\Omega_j(t_0,t)$$
 exists for a sufficiently small time-step $t$.
 
@@ -217,44 +217,44 @@ A. Alvermann and H. Fehske.
 High-order commutator-free exponential time-propagation of driven
   quantum systems.
 *J. Comput. Phys.*, 230(15):5930-5956, July 2011.
-[doi:10.1016/j.jcp.2011.04.006](http://dx.doi.org/10.1016/j.jcp.2011.04.006)
+[doi:10.1016/j.jcp.2011.04.006](http://dx.doi.org/10.1016/j.jcp.2011.04.006).
 
 W. Auzinger, H. Hofstätter, and O. Koch.
 Symmetrized local error estimators for time-reversible one-step methods in nonlinear evolution equations.
 *J. Comput. Appl. Math.*, 356:339-357, 2019.
-[doi:10.1016/j.cam.2019.02.011](https://doi.org/10.1016/j.cam.2019.02.011)
+[doi:10.1016/j.cam.2019.02.011](https://doi.org/10.1016/j.cam.2019.02.011).
 
 W. Auzinger, H. Hofstätter, O. Koch, M. Quell, and M. Thalhammer.
 A posteriori error estimation for Magnus-type integrators.
 *M2AN - Math. Model. Numer. Anal.*, 53(1):197-218, 2019.
-[doi:10.1051/m2an/2018050](https://doi.org/10.1051/m2an/2018050)
+[doi:10.1051/m2an/2018050](https://doi.org/10.1051/m2an/2018050).
 
 W. Auzinger and O. Koch.
 An improved local error estimator for symmetric time-stepping schemes.
 *Appl. Math. Lett.*, 82:106-110, 2018.
-[doi:10.1016/j.aml.2018.03.001](https://doi.org/10.1016/j.aml.2018.03.001)
+[doi:10.1016/j.aml.2018.03.001](https://doi.org/10.1016/j.aml.2018.03.001).
 
 P. Bader, S. Blanes, and N. Kopylov.
 Exponential propagators for the Schrödinger equation with a time-dependent potential.
 *J. Chem. Phys.*, 148(24):244109, 2018.
-[doi:10.1063/1.5036838](https://doi.org/10.1063/1.5036838)
+[doi:10.1063/1.5036838](https://doi.org/10.1063/1.5036838).
 
 T. Jawecki, W. Auzinger, and O. Koch.
 Computable upper error bounds for Krylov approximations to matrix exponentials and associated $\varphi$-functions.
 *BIT*, 60(1):157-197, 2020.
-[doi:10.1007/s10543-019-00771-6](https://doi.org/10.1007/s10543-019-00771-6)
+[doi:10.1007/s10543-019-00771-6](https://doi.org/10.1007/s10543-019-00771-6).
 
 T. Jawecki.
 Krylov techniques and approximations to the action of matrix exponentials.
 PhD thesis, TU Wien, Austria, 2022.
-[doi:10.34726/hss.2022.45083](https://doi.org/10.34726/hss.2022.45083)
+[doi:10.34726/hss.2022.45083](https://doi.org/10.34726/hss.2022.45083).
 
 T. Jawecki.
 A study of defect-based error estimates for the Krylov approximation of $\varphi$-functions.
 *Numer. Algorithms*, 90(1):323-361, 2022.
-[doi:10.1007/s11075-021-01190-x](https://doi.org/10.1007/s11075-021-01190-x)
+[doi:10.1007/s11075-021-01190-x](https://doi.org/10.1007/s11075-021-01190-x).
 
 W. Magnus.
 On the exponential solution of differential equations for a linear operator.
 *Comm. Pure Appl. Math.*, 7(4):649-673, 1954.
-[doi:10.1002/cpa.3160070404](https://doi.org/10.1002/cpa.3160070404)
+[doi:10.1002/cpa.3160070404](https://doi.org/10.1002/cpa.3160070404).
