@@ -1,5 +1,5 @@
 # mkprop package
-by Tobias Jawecki
+*by Tobias Jawecki*
 
 This package provides some Python routines for time integration based on Magnus-Krylov and Krylov methods.
 
@@ -151,9 +151,9 @@ class doublewellproblem():
 
 ## Magnus-Krylov methods
 This package provides adaptive Magnus-Krylov methods, namely, using the adaptive midpoint rule and CFM integrators with error estimates based on symmetrized defects and works of Auzinger et al.. Again, Magnus-Krylov approximations
-$$y_{MK}(t,H,u)\approx  \exp(\mathrm{i}t\Omega(t))u,$$
+$$y_{MK}(t0,t,H,u)\approx  \exp(\mathrm{i}t\Omega(t_0,t))u,$$
 are computed to satisfy the error bound 
-$$\lVert y_{MK}(t,H,u) -\exp(\mathrm{i}t\Omega(t))u\rVert\leq \varepsilon t,$$
+$$\lVert y_{MK}(t0,t,H,u) -\exp(\mathrm{i}t\Omega(t_0,t))u\rVert\leq \varepsilon t,$$
 where $\varepsilon>0$ is a given tolerance.
 
 useage: `examples/basicMagnusKrylov.ipynb`
