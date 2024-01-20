@@ -27,6 +27,9 @@ $$\| y_{MK}(t,H,u) -\exp(\mathrm{i}t\Omega(t))u\|\leq \varepsilon t,$$
 where $\varepsilon>0$ is a given tolerance.
 
 ## Examples
+
+`exlaser.py`: define Hamiltonian, etc..
+
 `examples/comparestepscosts.ipyn`: compare step sizes and computational cost of adaptive Magnus-Krylov methods. Step sizes:
 
 ![dt over t](https://github.com/newbisi/mkprop/blob/main/examples/stepsize.png)
