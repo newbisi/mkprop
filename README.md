@@ -182,12 +182,14 @@ mmax = 60
 # compute reference solution with adaptive fourth order CFM integrator
 tolref=1e-6
 dtinitref = 5e-2
-yref,_,_,_,_,_,_ = mkprop.adaptiveCFMp4j2(u,tnow,tend,dtinitref,Hamiltonian,tol=tolref,m=mmax,ktype=ktype,inr=inr)
+yref,_,_,_,_,_,_ = mkprop.adaptiveCFMp4j2(u,tnow,tend,dtinitref,Hamiltonian,tol=tolref,
+                                          m=mmax,ktype=ktype,inr=inr)
 
 # test adaptive midpoint rule
 tol=1e-4
 dtinit = 1e-3
-y,_,_,_,_,_,_ = mkprop.adaptivemidpoint(u,tnow,tend,dtinit,Hamiltonian,tol=tol,m=mmax,ktype=ktype,inr=inr)
+y,_,_,_,_,_,_ = mkprop.adaptivemidpoint(u,tnow,tend,dtinit,Hamiltonian,tol=tol,
+                                        m=mmax,ktype=ktype,inr=inr)
 
 print("approximation error = %.2e, tolerance = %.2e" % (nrm(yref-y)/tau, tol))
 # output: approximation error = 6.40e-05, tolerance = 1.00e-04
