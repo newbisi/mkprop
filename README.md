@@ -216,22 +216,22 @@ Errors and error estimates over the step size, asymptotic order.
 A. Alvermann and H. Fehske.
 High-order commutator-free exponential time-propagation of driven
   quantum systems.
-*J. Comput. Phys.*, 230(15):5930--5956, July 2011.
+*J. Comput. Phys.*, 230(15):5930-5956, July 2011.
 [doi:10.1016/j.jcp.2011.04.006](http://dx.doi.org/10.1016/j.jcp.2011.04.006)
 
 W. Auzinger, H. Hofstätter, and O. Koch.
 Symmetrized local error estimators for time-reversible one-step methods in nonlinear evolution equations.
-*J. Comput. Appl. Math.*, 356:339--357, 2019.
+*J. Comput. Appl. Math.*, 356:339-357, 2019.
 [doi:10.1016/j.cam.2019.02.011](https://doi.org/10.1016/j.cam.2019.02.011)
 
 W. Auzinger, H. Hofstätter, O. Koch, M. Quell, and M. Thalhammer.
 A posteriori error estimation for Magnus-type integrators.
-*M2AN - Math. Model. Numer. Anal.*, 53(1):197--218, 2019.
+*M2AN - Math. Model. Numer. Anal.*, 53(1):197-218, 2019.
 [doi:10.1051/m2an/2018050](https://doi.org/10.1051/m2an/2018050)
 
 W. Auzinger and O. Koch.
 An improved local error estimator for symmetric time-stepping schemes.
-*Appl. Math. Lett.*, 82:106--110, 2018.
+*Appl. Math. Lett.*, 82:106-110, 2018.
 [doi:10.1016/j.aml.2018.03.001](https://doi.org/10.1016/j.aml.2018.03.001)
 
 P. Bader, S. Blanes, and N. Kopylov.
@@ -241,7 +241,7 @@ Exponential propagators for the Schrödinger equation with a time-dependent pote
 
 T. Jawecki, W. Auzinger, and O. Koch.
 Computable upper error bounds for Krylov approximations to matrix exponentials and associated $\varphi$-functions.
-*BIT*, 60(1):157--197, 2020.
+*BIT*, 60(1):157-197, 2020.
 [doi:10.1007/s10543-019-00771-6](https://doi.org/10.1007/s10543-019-00771-6)
 
 T. Jawecki.
@@ -251,10 +251,10 @@ PhD thesis, TU Wien, Austria, 2022.
 
 T. Jawecki.
 A study of defect-based error estimates for the Krylov approximation of $\varphi$-functions.
-*Numer. Algorithms*, 90(1):323--361, 2022.
+*Numer. Algorithms*, 90(1):323-361, 2022.
 [doi:10.1007/s11075-021-01190-x](https://doi.org/10.1007/s11075-021-01190-x)
 
 W. Magnus.
 On the exponential solution of differential equations for a linear operator.
-*Comm. Pure Appl. Math.*, 7(4):649--673, 1954.
+*Comm. Pure Appl. Math.*, 7(4):649-673, 1954.
 [doi:10.1002/cpa.3160070404](https://doi.org/10.1002/cpa.3160070404)
