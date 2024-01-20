@@ -209,6 +209,8 @@ Cost:
 `examples/testerrasymorder.ipynb`:
 Errors and error estimates over the step size, asymptotic order.
 
+![errors over dt](https://github.com/newbisi/mkprop/blob/main/examples/asymptoticerror.png)
+
 ## Some references
 
 A. Alvermann and H. Fehske.
@@ -256,5 +258,3 @@ W. Magnus.
 On the exponential solution of differential equations for a linear operator.
 *Comm. Pure Appl. Math.*, 7(4):649--673, 1954.
 [doi:10.1002/cpa.3160070404](https://doi.org/10.1002/cpa.3160070404)
-
-![errors over dt](https://github.com/newbisi/mkprop/blob/main/examples/asymptoticerror.png)
