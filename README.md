@@ -12,7 +12,7 @@ run `python -m pip install .` inside the mkprop folder to install the package.
 
 Let $\psi(t)\in\mathbb{C}^n$ refer to the solution of the system of ODE's
 $$\psi'(t)=\mathrm{i}H\psi(t),\qquad \psi(t_0)=u\in\mathbb{C}^{n},$$
-where $H\in\mathbb{C}^{n\times n}$ and $u$ denotes an initial vector for a dimension $n$. Then $\psi(t)$ is given by the action of the matrix exponential on $u$, i.e.,
+where $H\in\mathbb{C}^{n\times n}$. Then $\psi(t)$ is given by the action of the matrix exponential on $u$, i.e.,
 $$\psi(t_0+t) = \exp(\mathrm{i}tH)u.$$
 In a similar manner, we consider non-autonomous system of ODE's.
 The solution of the system of ODE's
