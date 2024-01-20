@@ -52,6 +52,7 @@ tol = 1e-6
 yref = scipy.sparse.linalg.expm_multiply(1j*dt*M,u)
 y,_,_,mused = mkprop.expimv_pKry(M,u,t=dt,tol=tol)
 print("approximation error = %.2e, tolerance = %.2e" % (nrm(yref-y)/dt, tol))
+# output: approximation error = 5.06e-08, tolerance = 1.00e-06
 ```
 ## Magnus integrators
 The solution of the non-autonomous system of ODE's is given by a Magnus expansion $\psi(t) = \exp(\mathrm{i}t\Omega(t))u$ which exists for sufficiently small time steps. The matrix $\Omega(t)$ corresponds to an infinite sum of integrals over terms depending on $H$ and commutators of $H$ evaluated at different times. This series can be truncated to construct approximations to the Magnus expansion, and integrals can be approximated by quadrature rules. E.g., the midpoint rule
@@ -189,6 +190,7 @@ dtinit = 1e-3
 y,_,_,_,_,_,_ = mkprop.adaptivemidpoint(u,tnow,tend,dtinit,Hamiltonian,tol=tol,m=mmax,ktype=ktype,inr=inr)
 
 print("approximation error = %.2e, tolerance = %.2e" % (nrm(yref-y)/tau, tol))
+# output: approximation error = 6.40e-05, tolerance = 1.00e-04
 ```
 ## Examples
 
