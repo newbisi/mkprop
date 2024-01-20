@@ -12,16 +12,15 @@ run `python -m pip install .` inside the mkprop folder to install the package.
 
 Let $\psi(t)\in\mathbb{C}^n$ refer to the solution of the system of ODE's
 $$\psi'(t)=\mathrm{i}H\psi(t),\qquad \psi(t_0)\in\mathbb{C}^{n},$$
-where $H\in\mathbb{C}^{n\times n}$. Then $\psi(t)$ is given by the action of the matrix exponential on $u$, i.e.,
+where $H\in\mathbb{C}^{n\times n}$. Then $\psi(t)$ is given by the actio
 $$\psi(t_0+t) = \exp(\mathrm{i}tH)u.$$
-In a similar manner, we consider non-autonomous system of ODE's.
+In a similar manner, we also consider non-autonomous system of ODE's.
 The solution of the system of ODE's
 $$\psi'(t)=\mathrm{i}H(t)\psi(t),\qquad \psi(t_0)\in\mathbb{C}^{n},$$
-where $H(t)\in\mathbb{C}^{n\times n}$ depends on the time $t$, is given by the Magnus expansion
+where $H(t)\in\mathbb{C}^{n\times n}$ depends on the time $t$ can be described by
 $$\psi(t_0+t) = \exp(\mathrm{i}t\Omega(t_0,t))\psi(t_0),$$
-where
-$$\Omega(t_0,t)=\sum_{j=1}^\infty\Omega_j(t_0,t)$$
-exists for a sufficiently small time-step $t$.
+where $\Omega(t_0,t)$ corresponds to the Magnus expansion which exists for sufficiently small time-steps $t$,
+$$\Omega(t_0,t)=\sum_{j=1}^\infty\Omega_j(t_0,t).$$
 
 ## Krylov methods
 The routine `expimv_pKry` provides an approximation to the action of the matrix exponential,
