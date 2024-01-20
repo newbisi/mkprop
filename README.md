@@ -3,7 +3,7 @@ by Tobias Jawecki
 
 This package provides some Python routines for time integration based on Magnus-Krylov and Krylov methods.
 
-**The package is still under development. Future versions might have different API. The current version is not fully documentation.**
+**The package is still under development. Future versions might have different API. The current version is not fully documented.**
 
 ## Getting started
 run `python -m pip install .` inside the mkprop folder to install the package.
