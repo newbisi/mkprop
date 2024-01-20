@@ -27,7 +27,7 @@ exists for a sufficiently small time-step $t$.
 The routine `expimv_pKry` provides an approximation to the action of the matrix exponential,
 $$y_K(t,H,u) \approx \exp(\mathrm{i}H)u.$$
 The approximation is computed to satisfy the error bound
-$$\| y_K(t,H,u) -\exp(\mathrm{i}tH)u\|\leq \varepsilon t,$$
+$$\lVert y_K(t,H,u) -\exp(\mathrm{i}tH)u\rVert\leq \varepsilon t,$$
 where $\varepsilon>0$ is a given tolerance.
 The approximation is using Krylov method (Arnoldi or Lanczos) and requires the matrix $H$ or the action of the matrix $\psi \mapsto H\psi$.
 
@@ -152,7 +152,7 @@ class doublewellproblem():
 This package provides adaptive Magnus-Krylov methods, namely, using the adaptive midpoint rule and CFM integrators with error estimates based on symmetrized defects and works of Auzinger et al.. Again, Magnus-Krylov approximations
 $$y_{MK}(t,H,u)\approx  \exp(\mathrm{i}t\Omega(t))u,$$
 are computed to satisfy the error bound 
-$$\| y_{MK}(t,H,u) -\exp(\mathrm{i}t\Omega(t))u\|\leq \varepsilon t,$$
+$$\lVert y_{MK}(t,H,u) -\exp(\mathrm{i}t\Omega(t))u\rVert\leq \varepsilon t,$$
 where $\varepsilon>0$ is a given tolerance.
 
 useage: `examples/basicMagnusKrylov.ipynb`
