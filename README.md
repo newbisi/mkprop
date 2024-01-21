@@ -23,8 +23,8 @@ where $\Omega(t_0,t)$ corresponds to the Magnus expansion which exists for suffi
 $$\Omega(t_0,t)=\sum_{j=1}^\infty\Omega_j(t_0,t).$$
 
 ## Krylov methods
-The routine `expimv_pKry` provides an approximation to the action of the matrix exponential,
-$$y_K(t,H,u) \approx \exp(\mathrm{i}H)u.$$
+The routine `expimv_pKry` provides an approximation to the action of the matrix exponential on a vector $u\in\mathbb{C}^n$,
+$$y_K(t,H,u) \approx \exp(\mathrm{i}tH)u.$$
 The approximation is computed to satisfy the error bound
 $$\lVert y_K(t,H,u) -\exp(\mathrm{i}tH)u\rVert\leq \varepsilon t,$$
 where $\varepsilon>0$ is a given tolerance.
