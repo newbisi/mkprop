@@ -215,7 +215,7 @@ Errors and error estimates over the step size, asymptotic order.
 A. Alvermann and H. Fehske.
 High-order commutator-free exponential time-propagation of driven
   quantum systems.
-*J. Comput. Phys.*, 230(15):5930-5956, July 2011.
+*J. Comput. Phys.*, 230(15):5930-5956, 2011.
 [doi:10.1016/j.jcp.2011.04.006](http://dx.doi.org/10.1016/j.jcp.2011.04.006).
 
 W. Auzinger, H. Hofstätter, and O. Koch.
