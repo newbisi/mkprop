@@ -54,7 +54,7 @@ print("approximation error = %.2e, tolerance = %.2e" % (nrm(yref-y)/dt, tol))
 # output: approximation error = 5.06e-08, tolerance = 1.00e-06
 ```
 ## Magnus integrators
-The solution of the non-autonomous system of ODE's is given by a Magnus expansion $\psi(t) = \exp(\mathrm{i}t\Omega(t))u$ which exists for sufficiently small time steps. The matrix $\Omega(t)$ corresponds to an infinite sum of integrals over terms depending on $H$ and commutators of $H$ evaluated at different times. This series can be truncated to construct approximations to the Magnus expansion, and integrals can be approximated by quadrature rules. E.g., the midpoint rule
+The solution of the non-autonomous system of ODE's is given by a Magnus expansion $\psi(t_0+t) = \exp(\mathrm{i}t\Omega(t_0,t))\psi(t_0)$ which exists for sufficiently small time steps. The matrix $\Omega(t_0,t)$ corresponds to an infinite sum of integrals over terms depending on $H$ and commutators of $H$ evaluated at different times. This series can be truncated to construct approximations to the Magnus expansion, and integrals can be approximated by quadrature rules. E.g., for an initial vector $u\in\mathbb{c}$, the midpoint rule
 $$\exp(\mathrm{i}t\Omega(t_0,t))u\approx\exp(\mathrm{i}tH(t_0+t/2))u,$$
 for a sufficiently small time-step $t$.
 A very general approach consists of avoiding commutator terms in higher order approximations. E.g., the fourth order method
