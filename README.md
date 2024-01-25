@@ -30,7 +30,7 @@ $$\lVert y_K(t,H,u) -\exp(\mathrm{i}tH)u\rVert\leq \varepsilon t,$$
 where $\varepsilon>0$ is a given tolerance.
 The approximation is using Krylov method (Arnoldi or Lanczos) and requires the matrix $H$ or the action of the matrix $\psi \mapsto H\psi$.
 
-useage: `examples/basicKrylov.ipynb`
+usage: `examples/basicKrylov.ipynb`
 
 ```python
 import scipy.sparse
@@ -155,7 +155,7 @@ are computed to satisfy the error bound
 $$\lVert y_{MK}(t_0,t,H,u) -\exp(\mathrm{i}t\Omega(t_0,t))u\rVert\leq \varepsilon t,$$
 where $\varepsilon>0$ is a given tolerance.
 
-useage: `examples/basicMagnusKrylov.ipynb`
+usage: `examples/basicMagnusKrylov.ipynb`
 ```python
 import numpy as np
 import mkprop
