@@ -66,9 +66,6 @@ A very general approach consists of avoiding commutator terms in higher order ap
 $$\exp(\mathrm{i}t\Omega(t,t_0))u\approx\exp(\mathrm{i}tB_2(t,t_0))\exp(\mathrm{i}tB_1(t,t_0))u,$$
 where $B_1$ and $B_2$ correspond to linear combinitions of $H$ evaluated at different times. In general, higher order methods allow taking larger time steps $t$.
 
-%Coefficients:
-%$$c=(c_1,\ldots,c_K)\in[0,1]^K,\quad a=\left(\begin{array}{llll}a_{11}&a_{12}&\cdots&a_{1K}\\\vdots&\vdots&\ddots&\vdots\\a_{J1}&a_{J2}&\cdots&a_{JK}\end{array}\right)\in\mathbb{R}^{J\times K}.$$
-
 The following methods are available:
 [CFM integrators with table of coefficients](https://github.com/newbisi/mkprop/blob/main/docs/tableofcoef.ipynb)
 
