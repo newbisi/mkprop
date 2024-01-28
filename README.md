@@ -66,7 +66,7 @@ A very general approach consists of avoiding commutator terms in higher order ap
 $$\exp(\mathrm{i}t\Omega(t,t_0))u\approx\exp(\mathrm{i}tB_2(t,t_0))\exp(\mathrm{i}tB_1(t,t_0))u,$$
 where $B_1$ and $B_2$ correspond to linear combinitions of $H$ evaluated at different times. In general, higher order methods allow taking larger time steps $t$.
 
-Coefficients for CFM: $$c=(c_1,\ldots,c_K)\in[0,1]^K,\quad a=\begin{pmatrix}a_{11}&a_{12}&\cdots&a_{1K}\\\\ \vdots&\vdots&\ddots&\vdots\\\\ a_{J1}&a_{J2}&\cdots&a_{JK}\end{pmatrix}\in\mathbb{R}^{J\times K}.$$
+Commutator free Magnus (CFM) integrators are of the form $S(t,t_0)=\exp(\mathrm{i}tB_J(t,t_0))\cdots\exp(\mathrm{i}tB_1(t,t_0)),$$ where $$B_j=\sum_{k=1}^Ka_{jk}H(t_0+c_kt),$$ for coefficients $c=(c_1,\ldots,c_K)\in[0,1]^K$ and $a=(a_{jk})\in\mathbb{R}^{J\times K}$.
 
 The following methods are available:
 [CFM integrators with table of coefficients](https://github.com/newbisi/mkprop/blob/main/docs/tableofcoef.ipynb)
