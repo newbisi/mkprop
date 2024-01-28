@@ -1,7 +1,7 @@
-# mkprop package
+# mkprop
 *by Tobias Jawecki*
 
-This package provides some Python routines for time integration based on Magnus-Krylov and Krylov methods.
+This package provides some Python routines for adaptive time integration based on Magnus-Krylov and Krylov methods.
 
 **This package is still under development. Future versions might have different API. The current version is not fully documented.**
 
@@ -12,15 +12,19 @@ run `python -m pip install .` inside the mkprop folder to install the package.
 
 Let $\psi(t)\in\mathbb{C}^n$ refer to the solution of the system of ODE's
 $$\psi'(t)=\mathrm{i}H\psi(t),\qquad \psi(t_0)\in\mathbb{C}^{n},$$
-where $H\in\mathbb{C}^{n\times n}$. Then $\psi(t_0+t)$ for some time-step $t$ is given by the action of the matrix exponential
+where $H\in\mathbb{C}^{n\times n}$, $t\in\mathbb{R}$, and $t_0\in\mathbb{R}$ is a given initial time. Then $\psi(t_0+t)$ for some time-step $t$ is given by the action of the matrix exponential
 $$\psi(t_0+t) = \exp(\mathrm{i}tH)\psi(t_0).$$
+For large $n$ the matrix exponential of $\mathrm{i}tH$ can not be computed directly. The present package provides Krylov methods to compute the action of the matrix exponential, perfcetly fitting to the case that $n$ is large and the action of the matrix $\psi \mapsto H\psi$ is available.
+
 In a similar manner, we also consider non-autonomous system of ODE's.
-The solution of the system of ODE's
+The time propagation for the solution $\psi(\tau)\in\mathbb{C}^n$ of the system of ODE's
 $$\psi'(t)=\mathrm{i}H(t)\psi(t),\qquad \psi(t_0)\in\mathbb{C}^{n},$$
-where $H(t)\in\mathbb{C}^{n\times n}$ depends on the time $t$ can be described by
-$$\psi(t_0+t) = \exp(\mathrm{i}t\Omega(t_0,t))\psi(t_0),$$
-where $\Omega(t_0,t)$ corresponds to the Magnus expansion which exists for sufficiently small time-steps $t$,
-$$\Omega(t_0,t)=\sum_{j=1}^\infty\Omega_j(t_0,t).$$
+where $H(t)\in\mathbb{C}^{n\times n}$ depends on the time $t$, can be described by a matrix exponential of the Magnus expansion $\Omega(t,t_0)$. Namely,
+$$\psi(t_0+t) = \exp(\mathrm{i}\Omega(t,t_0))\psi(t_0).$$
+The Magnus expansion corresponds to an infinite series,
+$$\Omega(t,t_0)=\sum_{j=1}^\infty\Omega_j(t,t_0) = \int_{t_0}^{t_0+t} H(s) \,\mathrm{d}s + \int_{t_0}^{t_0+t} \int_{t_0}^{t_0+s_1} [H(s_1),H(s_2)] \,\mathrm{d}s_2 \,\mathrm{d}s_1 + \ldots ,$$
+where the matrix commutator is defined by $[A,B] = AB-BA\in\mathbb{C}^{n\times n}$ for two matrices $A,B\in\mathbb{C}^{n\times n}$. This infinite series converges for a sufficiently small time step $t$. In the simple case of $H$ having the commutator $[H(t),H(s)]=0$ for all times $t,s\in\mathbb{R}$, the Magnus expansion simplifies to $\Omega(t,t_0)=\int_{t_0}^{t_0+t} H(s) \,\mathrm{d}s$. Magnus integrators refer to methods which make use of approximations to this expansions, to approximate the time propagation $\psi(t_0)$ to $\psi(t_0+t)$. Typically, Magnus integrators first provide an approximation
+$$S(t,t_0) \approx \exp(\mathrm{i}\Omega(t,t_0))$$
 
 ## Krylov methods
 The routine `expimv_pKry` provides an approximation to the action of the matrix exponential on a vector $u\in\mathbb{C}^n$,
@@ -53,13 +57,17 @@ y,_,_,mused = mkprop.expimv_pKry(M,u,t=dt,tol=tol)
 print("approximation error = %.2e, tolerance = %.2e" % (nrm(yref-y)/dt, tol))
 # output: approximation error = 5.06e-08, tolerance = 1.00e-06
 ```
+
 ## Magnus integrators
-The solution of the non-autonomous system of ODE's is given by a Magnus expansion $\psi(t_0+t) = \exp(\mathrm{i}t\Omega(t_0,t))\psi(t_0)$ which exists for sufficiently small time steps. The matrix $\Omega(t_0,t)$ corresponds to an infinite sum of integrals over terms depending on $H$ and commutators of $H$ evaluated at different times. This series can be truncated to construct approximations to the Magnus expansion, and integrals can be approximated by quadrature rules. E.g., for an initial vector $u\in\mathbb{C}^n$, applying the midpoint quadrature rule to the first term of the Magnus expansion we arrive at
-$$\exp(\mathrm{i}t\Omega(t_0,t))u\approx\exp(\mathrm{i}tH(t_0+t/2))u,$$
+The solution of the non-autonomous system of ODE's is given by a Magnus expansion $\psi(t_0+t) = \exp(\mathrm{i}t\Omega(t,t_0))\psi(t_0)$ which exists for sufficiently small time steps. The matrix $\Omega(t,t_0)$ corresponds to an infinite sum of integrals over terms depending on $H$ and commutators of $H$ evaluated at different times. This series can be truncated to construct approximations to the Magnus expansion, and integrals can be approximated by quadrature rules. E.g., for an initial vector $u\in\mathbb{C}^n$, applying the midpoint quadrature rule to the first term of the Magnus expansion we arrive at
+$$\exp(\mathrm{i}t\Omega(t,t_0))u\approx\exp(\mathrm{i}tH(t_0+t/2))u,$$
 which is a good approximation for a sufficiently small time-step $t$.
 A very general approach consists of avoiding commutator terms in higher order approximations. E.g., the fourth order method
-$$\exp(\mathrm{i}t\Omega(t_0,t))u\approx\exp(\mathrm{i}tB_2(t_0,t))\exp(\mathrm{i}tB_1(t_0,t))u,$$
+$$\exp(\mathrm{i}t\Omega(t,t_0))u\approx\exp(\mathrm{i}tB_2(t,t_0))\exp(\mathrm{i}tB_1(t,t_0))u,$$
 where $B_1$ and $B_2$ correspond to linear combinitions of $H$ evaluated at different times. In general, higher order methods allow taking larger time steps $t$.
+
+Coefficients:
+$$c=(c_1,\ldots,c_K)\in[0,1]^K,\quad a=\begin{pmatrix}a_{11}&a_{12}&\cdots&a_{1K}\\\vdots&\vdots&\ddots&\vdots\\a_{J1}&a_{J2}&\cdots&a_{JK}\end{pmatrix}\in\mathbb{R}^{J\times K}.$$
 
 The following methods are available:
 [CFM integrators with table of coefficients](https://github.com/newbisi/mkprop/blob/main/docs/tableofcoef.ipynb)
@@ -150,9 +158,9 @@ class doublewellproblem():
 
 ## Magnus-Krylov methods
 This package provides adaptive Magnus-Krylov methods, namely, using the adaptive midpoint rule and CFM integrators with error estimates based on symmetrized defects and works of Auzinger et al.. Again, Magnus-Krylov approximations
-$$y_{MK}(t_0,t,H,u)\approx  \exp(\mathrm{i}t\Omega(t_0,t))u,$$
+$$y_{MK}(t,t_0,H,u)\approx  \exp(\mathrm{i}t\Omega(t,t_0))u,$$
 are computed to satisfy the error bound 
-$$\lVert y_{MK}(t_0,t,H,u) -\exp(\mathrm{i}t\Omega(t_0,t))u\rVert\leq \varepsilon t,$$
+$$\lVert y_{MK}(t,t_0,H,u) -\exp(\mathrm{i}t\Omega(t,t_0))u\rVert\leq \varepsilon t,$$
 where $\varepsilon>0$ is a given tolerance.
 
 usage: `examples/basicMagnusKrylov.ipynb`
@@ -257,3 +265,8 @@ W. Magnus.
 On the exponential solution of differential equations for a linear operator.
 *Comm. Pure Appl. Math.*, 7(4):649-673, 1954.
 [doi:10.1002/cpa.3160070404](https://doi.org/10.1002/cpa.3160070404).
+
+S. Blanes, F. Casas, J. Oteo and J. Ros.
+The Magnus expansion and some of its applications.
+*Phys. Rep.*, 470(5):151-238, 2009.
+[doi:10.1016/j.physrep.2008.11.001](https://doi.org/10.1016/j.physrep.2008.11.001).
