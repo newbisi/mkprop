@@ -98,7 +98,7 @@ def expimv_pKry(A,u,t=1.0,m=40,nrm=None,inr=None,tol=1e-8,ktype=1,reo=1,optsout=
             if beta*htemp<tol: # Ja22 condition for lucky breakdown
                 muse = k+1
                 needstep = False
-                errest += dt*beta*Htemp
+                errest += dt*beta*htemp
                 break
             gaml += np.log(htemp/(k+1))
             if (gaml + k*logdt < logtol):
