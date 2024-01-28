@@ -40,6 +40,7 @@ def adaptivemidpoint(u,tnow,tend,dtinit,prob,tol=1e-8,m=30,ktype=1,reo=1,nrm=Non
     mcolist1=[]
     mcolist2=[]
     mcolist3=[]
+    elist = []
     mco1=0
     mco2=0
     mco3=0
@@ -59,7 +60,8 @@ def adaptivemidpoint(u,tnow,tend,dtinit,prob,tol=1e-8,m=30,ktype=1,reo=1,nrm=Non
         defp1 = Hpsi + dt*dHpsi + sig*dt**2/2*(HdHpsi-dHHpsi)
         
         mv2, _ = prob.setupHamiltonian(tnow+dt)
-        def1 = defp1-mv2(y1)
+        Hpsi = mv2(y1)
+        def1 = defp1-Hpsi
         errestmag = dt/(p+1)*nrm(def1)
 
         mco1+=sum(mlist)
@@ -77,7 +79,12 @@ def adaptivemidpoint(u,tnow,tend,dtinit,prob,tol=1e-8,m=30,ktype=1,reo=1,nrm=Non
             mco1 = 0
             mco2 = 0
             mco3 = 0
-            dtnew = spstep * (errpartm * dt * tol/errestmag)**(1.0/p) * dt
+            epsi = inr(y1,Hpsi)
+            elist.append(epsi)
+            if errestmag!=0:
+                dtnew = spstep * (errpartm * dt * tol/errestmag)**(1.0/p) * dt
+            else:
+                dt = 2*dt
             dt = min(dtnew,tend-tnow)
         else:
             mco2 += mco1+mco3
@@ -85,7 +92,7 @@ def adaptivemidpoint(u,tnow,tend,dtinit,prob,tol=1e-8,m=30,ktype=1,reo=1,nrm=Non
             mco3 = 0
             dtnew = spstepfail * (errpartm * dt * tol/errestmag)**(1.0/p) * dt
             dt = min(dtnew,tend-tnow)
-    return y1,tlist,dtlist,errmlist,mcolist1,mcolist2,mcolist3
+    return y1,tlist,dtlist,errmlist,mcolist1,mcolist2,mcolist3,elist
 
 def adaptivemidpoint_symdef(u,tnow,tend,dtinit,prob,tol=1e-8,m=30,ktype=1,reo=1,nrm=None, inr=None):
     if inr is None:
@@ -128,7 +135,10 @@ def adaptivemidpoint_symdef(u,tnow,tend,dtinit,prob,tol=1e-8,m=30,ktype=1,reo=1,
             dtlist.append(dt)
             tlist.append(tnow)
             errmlist.append(errestmag)
-            dtnew = spstep * (errpartm * dt * tol/errestmag)**(1.0/p) * dt
+            if errestmag!=0:
+                dtnew = spstep * (errpartm * dt * tol/errestmag)**(1.0/p) * dt
+            else:
+                dt = 2*dt
             dt = min(dtnew,tend-tnow)
         else:
             dtnew = spstepfail * (errpartm * dt * tol/errestmag)**(1.0/p) * dt
@@ -272,7 +282,10 @@ def adaptiveCFM4_old(u,tnow,tend,dtinit,prob,tol=1e-8,m=30,ktype=1,reo=1,nrm=Non
             dtlist.append(dt)
             tlist.append(tnow)
             errmlist.append(errestmag)
-            dtnew = spstep * (errpartm * dt * tol/errestmag)**(1.0/p) * dt
+            if errestmag!=0:
+                dtnew = spstep * (errpartm * dt * tol/errestmag)**(1.0/p) * dt
+            else:
+                dt = 2*dt
             dt = min(dtnew,tend-tnow)
         else:
             dtnew = spstepfail * (errpartm * dt * tol/errestmag)**(1.0/p) * dt
@@ -327,8 +340,8 @@ def adaptiveCFMBBK4(u,tnow,tend,dtinit,prob,tol=1e-8,m=30,ktype=1,reo=1,nrm=None
     parth2 = [0,0,1,1]
     return adaptiveCFM4_symdefHermite(u,tnow,tend,dtinit,prob,cmat,amat,parth1,parth2,tol,m,ktype,reo,nrm,inr,hasexpV=True)
     
-def adaptiveCFM4_symdefHermite(u,tnow,tend,dtinit,prob,cmat,amat,parth1,parth2,tol,m,ktype,reo,nrm,inr,hasexpV=False):
-
+def adaptiveCFM4_symdefHermite(u,tnow,tend,dtinit,prob,cmat,amat,parth1,parth2,
+                               tol,m,ktype,reo,nrm,inr,hasexpV=False):
     chat = -0.5
     jexps=len(amat)
     p=4
@@ -341,6 +354,7 @@ def adaptiveCFM4_symdefHermite(u,tnow,tend,dtinit,prob,cmat,amat,parth1,parth2,t
     mclist1=[]
     mclist2=[]
     mclist3=[]
+    elist = []
     spstep=0.8
     spstepfail=0.7
     errpartm=0.99
@@ -395,17 +409,17 @@ def adaptiveCFM4_symdefHermite(u,tnow,tend,dtinit,prob,cmat,amat,parth1,parth2,t
         # computer error estimate
         y1 = y1sub
         mv2, _ = prob.setupHamiltonian(tnow+dt)
-        ye1 = mv2(y1)
+        Hpsi = mv2(y1)
         mc3 += 1
-        def1 = e1sub-0.5*ye1
+        def1 = e1sub-0.5*Hpsi
         errestmag = dt/(p+1)*nrm(def1)
-        
-    
+
         # test error estimate
         if errestkry+errestmag<dt*tol:
             y0 = y1
-            ye0 = ye1
+            ye0 = Hpsi
             dtlist.append(dt)
+            tnow += dt
             tlist.append(tnow)
             errmlist.append(errestmag)
             mclist1.append(mc1)
@@ -414,8 +428,13 @@ def adaptiveCFM4_symdefHermite(u,tnow,tend,dtinit,prob,cmat,amat,parth1,parth2,t
             mc1=0
             mc2=0
             mc3=0
-            tnow += dt
-            dtnew = spstep * (errpartm * dt * tol/errestmag)**(1.0/p) * dt
+            energynow = inr(y1,Hpsi)
+            elist.append(energynow)
+            
+            if errestmag!=0:
+                dtnew = spstep * (errpartm * dt * tol/errestmag)**(1.0/p) * dt
+            else:
+                dt = 2*dt
             dt = min(dtnew,tend-tnow)
         else:
             mc2 = mc1+mc3
@@ -423,5 +442,5 @@ def adaptiveCFM4_symdefHermite(u,tnow,tend,dtinit,prob,cmat,amat,parth1,parth2,t
             mc3=0
             dtnew = spstepfail * (errpartm * dt * tol/errestmag)**(1.0/p) * dt
             dt = min(dtnew,tend-tnow)
-    return y1, tlist, dtlist, errmlist, mclist1, mclist2,mclist3
+    return y1, tlist, dtlist, errmlist, mclist1, mclist2,mclist3, elist
         

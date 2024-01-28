@@ -68,7 +68,7 @@ class doublewellproblem():
             dV_CFM += (c[j+1]+chat)*a[j+1]*self.dVt(t+c[j+1]*dt)
         self.V = V_CFM
         self.dV = dV_CFM
-        if sum(a)!=0:
+        if abs(sum(a))>1e-14: # not zero
             H = sum(a)*self.H0 - scipy.sparse.diags([self.V], [0])
             mv = lambda u : H.dot(u)
         else:
