@@ -6,7 +6,7 @@ This package provides some Python routines for adaptive time integration based o
 **This package is still under development. Future versions might have different API. The current version is not fully documented.**
 
 ## Getting started
-run `python -m pip install .` inside the mkprop folder to install the package.
+Install the latest release from the pypi package manager `python -m pip install mkprop`
 
 ## Mathematical problem description
 
