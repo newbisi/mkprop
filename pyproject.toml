@@ -10,7 +10,7 @@ authors = [
 ]
 description = "A python package for Krylov and Magnus-Krylov based time propagation."
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.7"
 dependencies = [
     "numpy",
     "scipy",
