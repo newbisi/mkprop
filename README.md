@@ -45,17 +45,17 @@ nrm = lambda x : np.linalg.norm(x,2)
 
 n = 1000
 e = np.ones(n)
-e1 = np.ones(n-1)+1e-5*np.random.rand(n-1)
+e1 = np.ones(n-1)
 # M is finite difference discretization of 1d Laplace operator
 M = scipy.sparse.diags([e1.conj(),-2*e,e1], [-1,0,1])
-u=np.random.rand(n)
+u=np.ones(n)
 u=u/nrm(u)
 dt = 50
 tol = 1e-6
 yref = scipy.sparse.linalg.expm_multiply(1j*dt*M,u)
-y,_,_,mused = mkprop.expimv_pKry(M,u,t=dt,tol=tol)
+y = mkprop.expimv_pKry(M,u,t=dt,tol=tol)
 print("approximation error = %.2e, tolerance = %.2e" % (nrm(yref-y)/dt, tol))
-# output: approximation error = 5.06e-08, tolerance = 1.00e-06
+# output: approximation error = 1.35e-08, tolerance = 1.00e-06
 ```
 
 ## Magnus integrators
@@ -82,6 +82,7 @@ Define a simple problem, see also `examples/exlaser.py`.
 import numpy as np
 import sympy as sym
 import scipy.sparse
+import mkprop
 
 class doublewellproblem():
     def __init__(self,n):
@@ -92,6 +93,7 @@ class doublewellproblem():
         # problem related inner product
         dx = 2*L/(n+1)
         self.inr = lambda x,y : dx*np.vdot(x,y)
+        self.nrm = lambda x : np.sqrt(self.inr(x,x).real)
         
         # H_0
         e = np.ones(n+1)
@@ -99,7 +101,7 @@ class doublewellproblem():
         D2 = dx**(-2)*scipy.sparse.diags([e1.conj(),-2*e,e1], [-1,0,1])
         self.H0 = D2
 
-        # a double well potential V_0
+        # a double well potential V_0, time-independent part
         V0 = self.x**4 - 20*self.x**2 
 
         # add a time-dependent potential V(t)
@@ -115,16 +117,32 @@ class doublewellproblem():
         evaldVt = sym.lambdify([x,t], exprdV, "numpy")
         self.Vt = lambda tau: (V0  + evalVt(self.x,tau))
         self.dVt = lambda tau: evaldVt(self.x,tau)
-        
-    def getprop(self):
-        # return nodes x and inner product
-        return self.x, self.inr
-        
+
     def getinitialstate(self):
         # return initial state
         s, x0 = 0.2, -2.5
         u = (s*np.pi)**(-0.25)*np.exp(-(self.x-x0)**2/(2*s))
         return u
+        
+    def expimv(self,mv,t,u,tol):
+        # return exp(1j*t*H)*u
+        # where mv(y) = H*y
+        m=40
+        ktype=2
+        reo=0
+
+        y, info = mkprop.expimv_pKry(mv,u,t=t,m=m,tol=tol,ktype=ktype,reo=reo,
+                               inr=self.inr,nrm=self.nrm,optinfo=1)
+        errest = info[1][0]
+        mused = info[3]
+        return y, errest, mused
+
+#################################################################
+#### setup below does not depend on the choice of V, etc.
+
+    def getnrm(self):
+        # return nodes x and inner product
+        return self.inr, self.nrm
         
     def setupHamiltonian(self,t):
         # return a routine to apply H(t) = H0 - (V0 + V(t))
@@ -149,7 +167,7 @@ class doublewellproblem():
             dV_CFM += (c[j+1]+chat)*a[j+1]*self.dVt(t+c[j+1]*dt)
         self.V = V_CFM
         self.dV = dV_CFM
-        if sum(a)!=0:
+        if abs(sum(a))>1e-14: # not zero
             H = sum(a)*self.H0 - scipy.sparse.diags([self.V], [0])
             mv = lambda u : H.dot(u)
         else:
@@ -175,33 +193,25 @@ import matplotlib.pyplot as plt
 # setup problem from exlaser.py
 n=1200
 Hamiltonian = prob(n)
-x, inr = Hamiltonian.getprop()
-nrm = lambda u : ((inr(u,u)).real)**0.5
+inr, nrm = Hamiltonian.getnrm()
 u = Hamiltonian.getinitialstate()
 
 # define initial and final time
 tnow = 0
 tend = 0.1
-tau = tend-tnow
-
-# some options for Krylov method, use Lanczos
-ktype = 2
-mmax = 60
 
 # compute reference solution with adaptive fourth order CFM integrator
 tolref=1e-6
-dtinitref = 5e-2
-yref,_,_,_,_,_,_ = mkprop.adaptiveCFMp4j2(u,tnow,tend,dtinitref,Hamiltonian,tol=tolref,
-                                          m=mmax,ktype=ktype,inr=inr)
+dtinitref = 5e-1
+yref,info = mkprop.adaptiveCFMp4j2(u,tnow,tend,dtinitref,Hamiltonian,tol=tolref)
 
 # test adaptive midpoint rule
 tol=1e-4
 dtinit = 1e-3
-y,_,_,_,_,_,_ = mkprop.adaptivemidpoint(u,tnow,tend,dtinit,Hamiltonian,tol=tol,
-                                        m=mmax,ktype=ktype,inr=inr)
+y,info = mkprop.adaptivemidpoint(u,tnow,tend,dtinit,Hamiltonian,tol=tol)
 
-print("approximation error = %.2e, tolerance = %.2e" % (nrm(yref-y)/tau, tol))
-# output: approximation error = 6.40e-05, tolerance = 1.00e-04
+print("approximation error = %.2e, tolerance = %.2e" % (nrm(yref-y)/(tend-tnow), tol))
+approximation error = 6.40e-05, tolerance = 1.00e-04
 ```
 ## Examples
 
