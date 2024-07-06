@@ -299,7 +299,7 @@ def orthogonalize(H, V, k, w, inr, nrm, reo, GStype):
         if (reo>0):
             Htemp=np.zeros(k)
             for j in range(k+1):
-                Htemp[j] = inr(Vm[:,j],w)
+                Htemp[j] = inr(V[:,j],w)
             H[:k,k] += Htemp
             w -= V[:,:k] * Htemp
             countinr += k
