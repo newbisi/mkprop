@@ -4,32 +4,32 @@ from exlaser import doublewellproblem as prob
 import scipy.sparse
 
 def test_basicMagnusKrylov():
+
     # setup problem from exlaser.py
     n=500
     Hamiltonian = prob(n)
-    x, inr = Hamiltonian.getprop()
-    nrm = lambda u : ((inr(u,u)).real)**0.5
+    inr, nrm = Hamiltonian.getnrm()
     u = Hamiltonian.getinitialstate()
-    
+
     # define initial and final time
     tnow = 0
     tend = 0.05
     tau = tend-tnow
     
     # some options for Krylov method, use Lanczos
-    ktype = 2
-    mmax = 60
+    #ktype = 2
+    #mmax = 60
     
     tolref=1e-6
     dtinitref = 5e-1
-    yref,_,_,_,_,_,_,_ = mkprop.adaptiveCFMp4j2(u,tnow,tend,dtinitref,Hamiltonian,tol=tolref,m=mmax,ktype=ktype,inr=inr)
+    yref,info = mkprop.adaptiveCFMp4j2(u,tnow,tend,dtinitref,Hamiltonian,tol=tolref)
     
     # test adaptive midpoint rule
     tol=1e-4
     dtinit = 1e-3
-    y,_,_,_,_,_,_,_ = mkprop.adaptivemidpoint(u,tnow,tend,dtinit,Hamiltonian,tol=tol,m=mmax,ktype=ktype,inr=inr)
+    y,info = mkprop.adaptivemidpoint(u,tnow,tend,dtinit,Hamiltonian,tol=tol)
 
-    errorsmallertol =  (nrm(yref-y)/tau <= tol)
+    errorsmallertol = (nrm(yref-y)/tau <= tol)
     if errorsmallertol:
         assert True
     else:
@@ -47,7 +47,7 @@ def test_basicKrylov():
     dt = 50
     tol = 1e-6
     yref = scipy.sparse.linalg.expm_multiply(1j*dt*M,u)
-    y,_,_,mused = mkprop.expimv_pKry(M,u,t=dt,tol=tol)
+    y = mkprop.expimv_pKry(M,u,t=dt,tol=tol)
 
     errorsmallertol =  (nrm(yref-y)/dt <= tol)
     if errorsmallertol:

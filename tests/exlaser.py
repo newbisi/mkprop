@@ -1,6 +1,7 @@
 import numpy as np
 import sympy as sym
 import scipy.sparse
+import mkprop
 
 class doublewellproblem():
     def __init__(self,n):
@@ -11,6 +12,7 @@ class doublewellproblem():
         # problem related inner product
         dx = 2*L/(n+1)
         self.inr = lambda x,y : dx*np.vdot(x,y)
+        self.nrm = lambda x : np.sqrt(self.inr(x,x).real)
         
         # H_0
         e = np.ones(n+1)
@@ -18,7 +20,7 @@ class doublewellproblem():
         D2 = dx**(-2)*scipy.sparse.diags([e1.conj(),-2*e,e1], [-1,0,1])
         self.H0 = D2
 
-        # a double well potential V_0
+        # a double well potential V_0, time-independent part
         V0 = self.x**4 - 20*self.x**2 
 
         # add a time-dependent potential V(t)
@@ -34,16 +36,44 @@ class doublewellproblem():
         evaldVt = sym.lambdify([x,t], exprdV, "numpy")
         self.Vt = lambda tau: (V0  + evalVt(self.x,tau))
         self.dVt = lambda tau: evaldVt(self.x,tau)
-        
-    def getprop(self):
-        # return nodes x and inner product
-        return self.x, self.inr
-        
+
     def getinitialstate(self):
         # return initial state
         s, x0 = 0.2, -2.5
         u = (s*np.pi)**(-0.25)*np.exp(-(self.x-x0)**2/(2*s))
         return u
+        
+    def expimv(self,mv,t,u,tol):
+        # return exp(1j*t*H)*u
+        # where mv(y) = H*y
+        m=40
+        ktype=2
+        reo=0
+
+        y, info = mkprop.expimv_pKry(mv,u,t=t,m=m,tol=tol,ktype=ktype,reo=reo,
+                               inr=self.inr,nrm=self.nrm,optinfo=1)
+        errest = info[1][0]
+        mused = info[3]
+        return y, errest, mused
+
+    def applyexpV(self,sig,t,u):
+        # return exp(1j*t*V)*u
+        # where V corresponds to V(t) or a linear combination sum_j aj*V(t + cj*dt)
+        # depending on the last call of setupHamiltonian or setupHamiltonianCFM
+        # this routine is only used in BBK18 time integrators
+        expitV = np.exp(-sig*t*self.V)
+        return u*expitV
+
+#################################################################
+#### setup below does not depend on the choice of V, etc.
+    
+    def getxaxis(self):
+        # return nodes x and inner product
+        return self.x
+        
+    def getnrm(self):
+        # return nodes x and inner product
+        return self.inr, self.nrm
         
     def setupHamiltonian(self,t):
         # return a routine to apply H(t) = H0 - (V0 + V(t))
@@ -76,10 +106,3 @@ class doublewellproblem():
         dmv = lambda u : -self.dV*u
         return mv, dmv
         
-    def applyexpV(self,sig,t,u):
-        # return exp(1j*t*V)*u
-        # where V corresponds to V(t) or a linear combination sum_j aj*V(t + cj*dt)
-        # depending on the last call of setupHamiltonian or setupHamiltonianCFM
-        # this routine is only used in BBK18 time integrators
-        expitV = np.exp(-sig*t*self.V)
-        return u*expitV
