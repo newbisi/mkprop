@@ -1,5 +1,5 @@
 # mkprop [![PyPI version](https://badge.fury.io/py/mkprop.svg)](https://badge.fury.io/py/mkprop)
-*by Tobias Jawecki*
+version v0.0.2 *by Tobias Jawecki*
 
 This package provides some Python routines for adaptive time integration based on Magnus-Krylov and Krylov methods.
 
