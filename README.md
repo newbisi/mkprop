@@ -108,14 +108,13 @@ for $J,K>0$ and coefficients
 ```math
 c=(c_1,\ldots,c_K)\in[0,1]^K\quad\text{and}\quad a=\begin{pmatrix}a_{11}&a_{12}&\ldots&a_{1K}\\\vdots&\vdots&\ddots&\vdots\\a_{J1}&a_{J2}&\ldots&a_{JK}\end{pmatrix}\in\mathbb{R}^{J\times K}.
 ```
-E.g., the second order exponential midpoint rule $\exp(\mathrm{i}t\Omega(t,t_0))u\approx\exp(\mathrm{i}tH(t_0+t/2))u$ with $J=K=1$ which has order $p=2$.
+E.g., the second order exponential midpoint rule $\exp(\mathrm{i}t\Omega(t,t_0))u\approx\exp(\mathrm{i}tH(t_0+t/2))u$ with $J=K=1$, $c_1=1/2$, and $a_{11}=1/2$.
+
+A CFM integrator of order $p$ satisfies $\lVert S(t,t_0) -\exp(\mathrm{i}t\Omega(t,t_0))\rVert = \mathrm{O}(t^{p+1})$ for a time-step $t\to 0$.
+Currently, only methods of order $p=2$ and $p=4$ are implemented with adaptive step-size control.
 
 The following methods are available:
 [CFM integrators with table of coefficients](https://github.com/newbisi/mkprop/blob/main/docs/tableofcoef.ipynb)
-
-
-Currently, only methods of order $p=2$ and $p=4$ are implemented with adaptive step-size control.
-
 
 To evaluate CFM integrators, we apply adaptive Krylov methods to approximate the action of the matrix exponentials $\exp(\mathrm{i}tB_J(t,t_0))$.
 This package provides adaptive Magnus-Krylov methods, namely, using CFM integrators with error estimates based on symmetrized defects and works of Auzinger et al.. Again, Magnus-Krylov approximations
