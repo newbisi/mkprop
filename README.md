@@ -1,5 +1,5 @@
 # mkprop [![PyPI version](https://badge.fury.io/py/mkprop.svg)](https://badge.fury.io/py/mkprop)
-version v0.0.2 *by Tobias Jawecki*
+*by Tobias Jawecki*
 
 This package provides some Python routines for adaptive time integration based on Magnus-Krylov and Krylov methods.
 
@@ -26,15 +26,14 @@ $$\Omega(t,t_0)=\sum_{j=1}^\infty\Omega_j(t,t_0) = \int_{t_0}^{t_0+t} H(s) \,\ma
 where the matrix commutator is defined by $[A,B] = AB-BA\in\mathbb{C}^{n\times n}$ for two matrices $A,B\in\mathbb{C}^{n\times n}$. This infinite series converges for a sufficiently small time step $t$. In the simple case of $H$ having the commutator $[H(t),H(s)]=0$ for all times $t,s\in\mathbb{R}$, the Magnus expansion simplifies to $\Omega(t,t_0)=\int_{t_0}^{t_0+t} H(s) \,\mathrm{d}s$. Magnus integrators refer to methods which make use of approximations to this expansions, to approximate the time propagation $\psi(t_0)$ to $\psi(t_0+t)$. Typically, Magnus integrators first provide an approximation
 $$S(t,t_0) \approx \exp(\mathrm{i}\Omega(t,t_0))$$
 
-## Krylov methods
-The routine `expimv_pKry` provides an approximation to the action of the matrix exponential on a vector $u\in\mathbb{C}^n$,
-$$y_K(t,H,u) \approx \exp(\mathrm{i}tH)u.$$
-The approximation is computed to satisfy the error bound
-$$\lVert y_K(t,H,u) -\exp(\mathrm{i}tH)u\rVert\leq \varepsilon t,$$
-where $\varepsilon>0$ is a given tolerance.
-The approximation is using Krylov method (Arnoldi or Lanczos) and requires the matrix $H$ or the action of the matrix $\psi \mapsto H\psi$.
+## Approximations to the action of matrix exponentials
 
-usage: `examples/basicKrylov.ipynb`
+Let $\psi(t)\in\mathbb{C}^n$ refer to the solution of the system of ODE's $\psi'(t)=\mathrm{i}H\psi(t)$, for an initial vector $\psi(t_0)\in\mathbb{C}^{n}$, a Hermitian matrix $H\in\mathbb{C}^{n\times n}$, an initial time $t_0\in\mathbb{R}$ and $t\in\mathbb{R}$. Then $\psi(t_0+t)$ for some time-step $t>0$ is given by the action of the matrix exponential $\psi(t_0+t) = \exp(\mathrm{i}tH)\psi(t_0)$. For large $n$ the matrix exponential of $\mathrm{i}tH$ can not be computed directly. The present package provides two different methods to compute the action of the matrix exponential, perfcetly fitting to the case that $n$ is large and the action of the matrix $\psi \mapsto H\psi$ is available.
+
+### Adaptive polynomial Krylov methods
+The routine `expimv_pKry` provides an approximation the action of the matrix exponential $y_K(t,H,u) \approx \exp(\mathrm{i}tH)u$ using an adaptive polynomial Krylov method (Arnoldi or Lanczos). The approximation is computed to satisfy the error bound $\lVert y_K(t,H,u) -\exp(\mathrm{i}tH)u\rVert\leq \varepsilon t,$ for a given tolerance $\varepsilon>0$.
+
+Basic usage:
 
 ```python
 import scipy.sparse
@@ -56,6 +55,38 @@ yref = scipy.sparse.linalg.expm_multiply(1j*dt*M,u)
 y = mkprop.expimv_pKry(M,u,t=dt,tol=tol)
 print("approximation error = %.2e, tolerance = %.2e" % (nrm(yref-y)/dt, tol))
 # output: approximation error = 1.35e-08, tolerance = 1.00e-06
+```
+
+Further examples and use cases are presented in https://github.com/newbisi/mkprop/blob/main/examples/basicKrylov.ipynb
+
+### Citing `mkprop.expimv_pKry`
+
+If you use adaptive Krylov propagators from this package in your scientific research, please cite the following publications where the underlying error estimates were introduced and discussed in details.
+
+T. Jawecki. A study of defect-based error estimates for the Krylov approximation of phi-functions. *Numer. Algorithms*, 90(1):323–361, 2022. doi:10.1007/s11075-021-01190-x
+
+T. Jawecki, W. Auzinger, and O. Koch. Computable upper error bounds for Krylov approximations to matrix exponentials and associated phi-functions. *BIT*, 60(1):157–197, 2020. doi:10.1007/s10543-019-00771-6
+```
+@Article{Ja22,
+  author = {Jawecki, T.},
+  title = {A study of defect-based error estimates for the {K}rylov approximation of $\varphi$-functions},
+  journal = {Numer. Algorithms},
+  year = 2022,
+  volume = 90,
+  number = 1,
+  pages = {323-361},
+  doi = {10.1007/s11075-021-01190-x}
+}
+@Article{JAK20,
+  author = {Jawecki, T. and Auzinger, W. and Koch, O.},
+  title = {Computable upper error bounds for {K}rylov approximations to matrix exponentials and associated $\varphi$-functions},
+  journal = {BIT},
+  year = 2020,
+  volume = 60,
+  number = 1,
+  pages = {157-197},
+  doi = {10.1007/s10543-019-00771-6},
+}
 ```
 
 ## Magnus integrators
