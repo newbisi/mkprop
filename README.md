@@ -86,6 +86,20 @@ T. Jawecki, W. Auzinger, and O. Koch. Computable upper error bounds for Krylov a
 }
 ```
 
+### Shift-and-Invert (SaI) Krylov approximations
+
+If you use SaI Krylov approximations from this package in your scientific research, please cite Chapter 4 in T. Jawecki. Krylov techniques and approximations to the action of matrix exponentials. Ph.D thesis, TU Wien, Austria, 2022. doi:10.34726/hss.2022.45083 
+
+```
+@PhdThesis{Ja22c,
+  author = {Jawecki, T.},
+  title = {{K}rylov techniques and approximations to the action of matrix exponentials},
+  school = {TU Wien},
+  year = 2022,
+  address = {Austria},
+  doi = {10.34726/hss.2022.45083},
+}
+```
 
 ## Adaptive Magnus-Krylov methods
 
