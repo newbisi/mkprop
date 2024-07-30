@@ -2,6 +2,8 @@ import scipy.sparse
 import scipy.linalg
 import scipy
 import numpy as np
+from .KS import *
+from .smallexpimv import *
 
 def expimv_pKry(A,u,t=1.0,m=40, sig=1j ,inr=None, nrm=None, tol=1e-8, ktype=1, reo=1,
                 V=None, optinfo=0, costratio=10,
@@ -255,70 +257,4 @@ def expimv_pKry(A,u,t=1.0,m=40, sig=1j ,inr=None, nrm=None, tol=1e-8, ktype=1, r
     else:
         return Yout
 
-def orthogonalize(H, V, k, w, inr, nrm, reo, GStype):
-# Hm is atleast k x k matrix
-    if (GStype==1):
-    # MGS modified Gram-Schmidt
-        for j in range(k+1):
-            H[j,k] = inr(V[:,j],w)
-            w -= H[j,k] * V[:,j]
-        countinr = k
-        if (reo>0):
-            countinr += k
-            for j in range(k+1):
-                Htemp = inr(V[:,j],w)
-                H[j,k] += Htemp
-                w -= Htemp * V[:,j]
 
-    elif (GStype==2):
-    # three-term recursion
-    # Hm is real and symmetric tridiagonal matrix
-        if k>0:
-            H[k-1,k] = H[k,k-1]
-            w -= V[:,k-1]*H[k-1,k] 
-        H[k,k] = inr(V[:,k],w).real
-        w -= V[:,k]*H[k,k]
-        countinr = 1
-        
-        if (reo>0):
-            for j in range(k):
-                temp1 = inr(V[:,j],w)
-                w -= temp1 * V[:,j]
-            temp2 = inr(V[:,k],w)
-            H[k,k] += temp2.real
-            w -= V[:,k]*temp2
-            countinr += k
-            
-    elif  (GStype==3):
-    # CGS classical Gram-Schmidt
-        for j in range(k+1):
-            H[j,k] = inr(V[:,j],w)
-        w -= V[:,:k] * H[:k,k]
-        countinr = k
-
-        if (reo>0):
-            Htemp=np.zeros(k)
-            for j in range(k+1):
-                Htemp[j] = inr(V[:,j],w)
-            H[:k,k] += Htemp
-            w -= V[:,:k] * Htemp
-            countinr += k
-    return countinr
-
-def smallexpimv(sig,dt,H,muse,ktype):
-    if muse > 1:
-        if ktype > 1: # lanczos        
-            a=np.diagonal(H)[:muse] # diagonal
-            b=np.diagonal(H,offset=-1)[:muse-1] # lower secondary diagonal
-            lam, Q = scipy.linalg.eigh_tridiagonal(a,b)
-            QH=Q.conj().T
-            explam_e1 = np.exp(sig*dt*lam)*QH[:,0]
-            x1 = Q.dot(explam_e1)
-        else:
-            expH = scipy.linalg.expm(sig*dt*H[:muse,:muse])
-            x1 = expH[:muse,0]
-    elif muse==1:
-        x1 = np.array([np.exp(sig*dt*H[0,0])])
-    else:
-        x1 = None
-    return x1
